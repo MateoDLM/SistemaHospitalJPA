@@ -1,0 +1,52 @@
+.Public: Cualquier clase, en cualquier paquete, en todo tu proyecto (e incluso fuera de él, si es una biblioteca) puede acceder a él.
+
+.Protected: Clases en el mismo paquete.
+Subclases (clases hijas), incluso si están en un paquete diferente.
+
+.Private: Solo se puede acceder desde dentro de la misma clase donde se declaró.
+
+.Default: Solo las clases que están en el mismo paquete.
+
+.@MappedSuperclass: permite compartir campos comunes entre varias entidades sin tener que repetir el código.
+Le dice a JPA: "Esta clase no es una entidad  (no tendrá su propia tabla en la base de datos), pero quiero que todas las clases @Entity que hereden de ella incluyan sus campos (columnas) en sus propias tablas".
+
+.@SuperBuilder: Es la versión de @Builder que funciona correctamente con la herencia.
+Le dice a Lombok: "Crea un método constructor (builder) para esta clase que incluya también todos los campos de la clase padre".
+
+.@NoArgsConstructor(access = AccessLevel.PROTECTED): JPA lo Requiere: Para que JPA (Hibernate) pueda crear objetos de tu entidad cuando los lee de la base de datos, necesita un constructor sin argumentos.
+@NoArgsConstructor(access = AccessLevel.PROTECTED): Quieres forzar que los objetos se creen de una manera controlada (con todos sus datos validados).
+Otros programadores (fuera del paquete) no pueden llamar a new TuClase() directamente. Se ven obligados a usar el Builder o el constructor que tú querías que usaran.
+
+.@Enumerated(EnumType.STRING): Le dice a la base de datos cómo debe guardar el valor de tu enum.
+Significa que el valor se guardará como un String (un texto) en la columna de la base de datos, usando el nombre de la constante del enum.
+
+.(!dni.matches("\\d{7,8}")): dni.matches(...): Es un método de String en Java que comprueba si el string dni coincide exactamente con una Expresión Regular (regex). Devuelve true si coincide, false si no.
+"\\d{7,8}": Esta es la Expresión Regular (el patrón a seguir):
+\\d: Significa "un dígito" (cualquier número del 0 al 9).
+{7,8}: Es un "cuantificador". Significa "el elemento anterior (\d) debe repetirse entre 7 y 8 veces, inclusive".
+
+.@ManyToOne
+ @JoinColumn(name = "hospital_id")
+ protected Hospital hospital;:
+ @JoinColumn (Lado Dueño): Es el que crea la columna física (la clave foránea) en la base de datos. Es el "dueño" de la relación.
+
+.@OneToMany(mappedBy = "paciente")
+protected List<Cita> citas;:
+mappedBy (Lado Inverso): NO crea ninguna columna. Es el lado "pasivo" que simplemente le dice a JPA: "La otra entidad ya me mapeó. Busca en ella".
+"NO crees ninguna columna en mi tabla (PACIENTE) para esta relación".
+"Yo soy el lado inverso. Para saber qué citas me pertenecen, ve a la clase Cita y busca el campo (atributo) llamado paciente".
+"Ese campo paciente en la clase Cita es el "lado dueño" y él ya tiene el @JoinColumn que define cómo nos conectamos".
+
+.cascade=CascadeType.ALL: "Cualquier operación que me hagas a mí (la entidad padre), aplícasela también a mis entidades hijas relacionadas".
+Propaga automáticamente todas las operaciones
+CascadeType.ALL solo debes usarlo en relaciones de composición, donde el "hijo" no tiene sentido o no puede existir sin el "padre".
+
+.trim(): Elimina los espacios en blanco (spaces, tabs, newlines) que están al principio y al final de un string.
+
+.@ElementCollection: Es una anotación de JPA (Java Persistence API) que se usa para mapear una colección de tipos simples (como String, Integer) o clases incrustables (@Embeddable).
+
+ En resumen: le dice a JPA que guarde los elementos de esa lista en una tabla separada que estará vinculada a la entidad principal.
+
+
+
+
