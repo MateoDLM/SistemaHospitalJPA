@@ -41,3 +41,15 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# Gradle cache
+.gradle/
+
+# Logs
+*.log
+
+# H2 en disco
+*.mv.db
+*.trace.db
+*.lock.db
+data/
